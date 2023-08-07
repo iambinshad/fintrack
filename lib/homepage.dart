@@ -89,11 +89,14 @@ class HomePage extends StatelessWidget {
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
-          Text('Transactions History'),
-          Text('See all'),
+          const Text('Transactions History'),
+          const Text('See all'),
         ],
       ),
-    )
+    ),
+    ListView.builder(itemBuilder: (context, index) {
+      return const ListTile();
+    },)
 
           ],
         ) ,
