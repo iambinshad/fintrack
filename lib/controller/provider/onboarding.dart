@@ -1,28 +1,18 @@
-import 'package:flutter/cupertino.dart';
-import 'package:shared_preferences/shared_preferences.dart';
+import 'dart:developer';
 
-class OnBoardingProvider extends ChangeNotifier {
-  int entry = 0;
-  bool skipbutton = false;
-  bool onLastPage = false;
-  bool getStarted = false;
+import 'package:fintrack/model/user.dart';
+import 'package:flutter/material.dart';
+import 'package:get/get_state_manager/get_state_manager.dart';
+import 'package:get/state_manager.dart';
 
-  void entryCounting() async {
-    int entryCount = 0;
-    entryCount = entryCount + 1;
-    entry = entryCount;
+class UserProvider extends GetxController {
+  User _user = User(
+      name: "", email: "", password: "", address: "", type: "", id: "", v: 0,token: "");
 
-    final sharedprefs = await SharedPreferences.getInstance();
-    //save enterence
-    await sharedprefs.setInt('enterCount', entry);
+  Rx<User> get user => _user.obs;
 
-    notifyListeners();
-  }
-
-  void isLastPage(index) {
-    onLastPage = (index == 2);
-    skipbutton = (index == 2);
-    getStarted = (index == 2);
-    notifyListeners();
+  setUser(String userr) {
+    _user = User.fromJson(userr);
+    log(_user.toJson().toString(), name: "User");
   }
 }

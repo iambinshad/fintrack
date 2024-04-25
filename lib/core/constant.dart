@@ -1,8 +1,3 @@
-import 'package:flutter/material.dart';
+  import 'package:cloudinary_public/cloudinary_public.dart';
 
-var kHeight10 =const SizedBox(height: 10,);
-var kHeight15 =const SizedBox(height: 15,);
-var kHeight20 =const SizedBox(height: 20,);
-var kHeight50 =const SizedBox(height: 50,);
-
-var headTextStyle = TextStyle(fontSize: 22, color: Colors.white,fontWeight: FontWeight.bold);
+final cloudinary = CloudinaryPublic('dzeuipdky', 'ml_default', cache: false);
