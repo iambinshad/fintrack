@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-const String url = "http://192.168.0.127:3000/";
+const String url = "http://192.168.0.126:3000/";
 
 var kHeight10 = const SizedBox(
   height: 10,

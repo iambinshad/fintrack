@@ -10,6 +10,7 @@ import 'package:fintrack/constants/utils.dart';
 import 'package:fintrack/controller/services/vehicle_adding.dart';
 import 'package:fintrack/core/constant.dart';
 import 'package:fintrack/model/vehicle.dart';
+import 'package:fintrack/model/vehicle_brand.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 
@@ -24,7 +25,12 @@ class VehicleAddingScreen extends StatefulWidget {
 class _VehicleAddingScreenState extends State<VehicleAddingScreen> {
   TextEditingController vehicleNameCntrl = TextEditingController();
   TextEditingController vehicleBrandCntrl = TextEditingController();
+  List<BrandListModel> brandList = [
+    BrandListModel(id: 3, brandName: "daldj", brandImage: "aldsj"),
+  ];
 
+  BrandListModel selectedBrand =
+      BrandListModel(id: -1, brandName: "Select Brand", brandImage: "Nothing");
   TextEditingController vehicleDescCntrl = TextEditingController();
   TextEditingController vehiclepriceCntrl = TextEditingController();
 
@@ -80,6 +86,23 @@ class _VehicleAddingScreenState extends State<VehicleAddingScreen> {
               ),
               kHeight10,
               CustomTextField(
+                suffix: DropdownButtonFormField<BrandListModel>(
+                  iconEnabledColor: Colors.red,
+                  icon: Padding(
+                    padding: EdgeInsets.only(right: 2),
+                    child: Icon(Icons.arrow_forward_ios_rounded,
+                        color: Colors.black26, size: 20),
+                  ),
+                  isDense: true,
+                  value: selectedBrand,
+                  items: brandList
+                      .map((brand) => DropdownMenuItem<BrandListModel>(
+                            value: brand,
+                            child: Text(brand.brandName),
+                          ))
+                      .toList(),
+                  onChanged: (cvalue) {},
+                ),
                 controller: vehicleBrandCntrl,
                 hintText: "Brand",
               ),

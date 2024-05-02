@@ -11,7 +11,6 @@ import 'package:get/get.dart';
 enum Auth { signIn, signUp }
 
 class AuthScreen extends StatefulWidget {
-
   static const String routeName = "/auth-screen";
   const AuthScreen({super.key});
 
@@ -20,7 +19,7 @@ class AuthScreen extends StatefulWidget {
 }
 
 class _AuthScreenState extends State<AuthScreen> {
-      final UserProvider uPro = Get.put(UserProvider());
+  final UserProvider uPro = Get.put(UserProvider());
 
   final AuthService authService = AuthService();
   final TextEditingController _emailController = TextEditingController();
@@ -61,120 +60,116 @@ class _AuthScreenState extends State<AuthScreen> {
       body: SafeArea(
         child: Padding(
           padding: const EdgeInsets.all(8.0),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              const Text(
-                "Welcome",
-                style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18),
-              ),
-              ListTile(
-                tileColor: _auth == Auth.signUp
-                    ? GlobalVarialble.backgroundColor
-                    : GlobalVarialble.greyBackgroundCOlor,
-                title: const Text("Create Account"),
-                leading: Radio(
-                    activeColor: GlobalVarialble.secondaryColor,
-                    value: Auth.signUp,
-                    groupValue: _auth,
-                    onChanged: (Auth? val) {
-                      setState(() {
-                        _auth = val!;
-                      });
-                    }),
-              ),
-              Visibility(
-                  visible: _auth == Auth.signUp,
-                  child: Container(
-                    padding: const EdgeInsets.all(8),
-                    color: Colors.white,
-                    child: Form(
-                        key: _signUpFormKey,
-                        child: Column(
-                          children: [
-                            CustomTextField(
-                              controller: _userNameController,
-                              hintText: "Name",
-                            ),
-                            kHeight10,
-                            CustomTextField(
-                              controller: _emailController,
-                              hintText: "Email",
-                            ),
-                            kHeight10,
-                            CustomTextField(
-                              controller: _passwordController,
-                              hintText: "Password",
-                            ),
-                            kHeight10,
-                            CustomButton(
-                              onTap: () {
-                                if (_signUpFormKey.currentState!.validate()) {
-                                  signUpUser();
-                                }
-                              },
-                              childText: "Sign Up",
-                            )
-                          ],
-                        )),
-                  )),
-              ListTile(
-                tileColor: _auth == Auth.signIn
-                    ? GlobalVarialble.backgroundColor
-                    : GlobalVarialble.greyBackgroundCOlor,
-                title: const Text("Sign-In"),
-                leading: Radio(
-                    activeColor: GlobalVarialble.secondaryColor,
-                    value: Auth.signIn,
-                    groupValue: _auth,
-                    onChanged: (Auth? val) {
-                      setState(() {
-                        _auth = val!;
-                      });
-                    }),
-              ),
-              Visibility(
-                  visible: _auth == Auth.signIn,
-                  child: Container(
-                    padding: const EdgeInsets.all(8),
-                    color: Colors.white,
-                    child: Form(
-                        key: _signInFormKey,
-                        child: Column(
-                          children: [
-                            CustomTextField(
-                              controller: _emailController,
-                              hintText: "Email",
-                            ),
-                            kHeight10,
-                            CustomTextField(
-                              controller: _passwordController,
-                              hintText: "Password",
-                            ),
-                            kHeight10,
-                            CustomButton(
-                              onTap: () {
-                                if (_signInFormKey.currentState!.validate()) {
-                                  signInUser();
-                                }
-                              },
-                              childText: "Sign In",
-                            )
-                          ],
-                        )),
-                  )),
-              ElevatedButton(
-                  onPressed: () {
-                    AuthService authService = AuthService();
-                    authService.getUserData(context: context);
-                    log(uPro
-                        .user
-                        .map((data) => data?.token)
-                        .toString());
-                  },
-                  child: Text("asdlkj")),
-            ],
-          ),
+          child:
+              Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
+            const Text(
+              "Welcome",
+              style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18),
+            ),
+            ListTile(
+              tileColor: _auth == Auth.signUp
+                  ? GlobalVarialble.backgroundColor
+                  : GlobalVarialble.greyBackgroundCOlor,
+              title: const Text("Create Account"),
+              leading: Radio(
+                  activeColor: GlobalVarialble.secondaryColor,
+                  value: Auth.signUp,
+                  groupValue: _auth,
+                  onChanged: (Auth? val) {
+                    setState(() {
+                      _auth = val!;
+                    });
+                  }),
+            ),
+            Visibility(
+                visible: _auth == Auth.signUp,
+                child: Container(
+                  padding: const EdgeInsets.all(8),
+                  color: Colors.white,
+                  child: Form(
+                      key: _signUpFormKey,
+                      child: Column(
+                        children: [
+                          CustomTextField(
+                            controller: _userNameController,
+                            hintText: "Name",
+                          ),
+                          kHeight10,
+                          CustomTextField(
+                            controller: _emailController,
+                            hintText: "Email",
+                          ),
+                          kHeight10,
+                          CustomTextField(
+                            controller: _passwordController,
+                            hintText: "Password",
+                          ),
+                          kHeight10,
+                          CustomButton(
+                            onTap: () {
+                              if (_signUpFormKey.currentState!.validate()) {
+                                signUpUser();
+                              }
+                            },
+                            childText: "Sign Up",
+                          )
+                        ],
+                      )),
+                )),
+            ListTile(
+              tileColor: _auth == Auth.signIn
+                  ? GlobalVarialble.backgroundColor
+                  : GlobalVarialble.greyBackgroundCOlor,
+              title: const Text("Sign-In"),
+              leading: Radio(
+                  activeColor: GlobalVarialble.secondaryColor,
+                  value: Auth.signIn,
+                  groupValue: _auth,
+                  onChanged: (Auth? val) {
+                    setState(() {
+                      _auth = val!;
+                    });
+                  }),
+            ),
+            Visibility(
+                visible: _auth == Auth.signIn,
+                child: Container(
+                  padding: const EdgeInsets.all(8),
+                  color: Colors.white,
+                  child: Form(
+                      key: _signInFormKey,
+                      child: Column(
+                        children: [
+                          CustomTextField(
+                            controller: _emailController,
+                            hintText: "Email",
+                          ),
+                          kHeight10,
+                          CustomTextField(
+                            controller: _passwordController,
+                            hintText: "Password",
+                          ),
+                          kHeight10,
+                          CustomButton(
+                            onTap: () {
+                              if (_signInFormKey.currentState!.validate()) {
+                                signInUser();
+                              }
+                            },
+                            childText: "Sign In",
+                          )
+                        ],
+                      )),
+                )),
+            ElevatedButton(
+                onPressed: () {
+                  AuthService authService = AuthService();
+                  authService.getUserData(context: context);
+                  log(uPro.user.map((data) => data?.token).toString());
+                },
+                child: Text("asdlkj")),
+         
+          ]),
         ),
       ),
     );

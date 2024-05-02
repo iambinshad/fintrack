@@ -2,6 +2,7 @@ import 'dart:developer';
 
 import 'package:avatar_glow/avatar_glow.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:highlight_text/highlight_text.dart';
 import 'package:speech_to_text/speech_to_text.dart' as stt;
 
@@ -31,20 +32,20 @@ class _VehicleSearchingScreenState extends State<VehicleSearchingScreen> {
       ),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
       floatingActionButton: AvatarGlow(
-          animate: false,
+          animate: isListening,
           glowColor: Theme.of(context).primaryColor,
-          duration: Duration(milliseconds: 2000),
+          duration: const Duration(milliseconds: 2000),
           repeat: true,
           child: FloatingActionButton(
-            child: Icon(isListening ? Icons.mic : Icons.mic_none),
             onPressed: _listen,
+            child: Icon(isListening ? Icons.mic : Icons.mic_none),
           )),
       body: SingleChildScrollView(
         reverse: true,
-        child: Container(
+        child: SizedBox(
           child: Text(
             _text,
-            style: TextStyle(fontSize: 32),
+            style: const TextStyle(fontSize: 32),
           ),
         ),
       ),
@@ -57,8 +58,18 @@ class _VehicleSearchingScreenState extends State<VehicleSearchingScreen> {
       log("entered 2");
 
       bool available = await _speech.initialize(
-        onStatus: (status) => print('onstate: $status'),
-        onError: (status) => print('onError: $status'),
+        debugLogging: true,
+        // onStatus: (status) {
+        //   log("Here also $status");
+
+        //   if (status == "notListening") {
+        //     log("Here also $status");
+        //     setState(() {
+        //       isListening = false;
+        //     });
+        //   }
+        // },
+        // onError: (status) => print('onError: $status'),
       );
       log("entered 3");
 
@@ -70,15 +81,29 @@ class _VehicleSearchingScreenState extends State<VehicleSearchingScreen> {
         log("entered 5");
 
         await _speech.listen(
-          onResult: (result) => setState(() {
-            log("entered 6");
+          onResult: (result) {
+            log(result.toString());
+            setState(() {
 
-            _text = result.recognizedWords;
-            if (result.hasConfidenceRating && result.confidence > 0) {
-              confidence = result.confidence;
-            }
-          }),
+              _text = result.recognizedWords;
+              if (result.hasConfidenceRating && result.confidence > 0) {
+                confidence = result.confidence;
+              }
+              if (result.finalResult && result.recognizedWords.isEmpty) {
+                setState(() {
+                  isListening = false;
+                });
+              }
+              if (!_speech.isListening&&!_speech.isBlank!) {
+                setState(() {
+                  isListening = false;
+                });
+              }
+
+            });
+          },
         );
+
       }
     } else {
       setState(() {

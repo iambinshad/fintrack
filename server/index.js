@@ -4,6 +4,7 @@ const express = require("express");
 // require('dotenv').config();
 // IMPORTS FROM OTHER FILES
 const authRouter = require("./routes/auth");
+const brandRouter = require('./routes/brand');
 const vehicleRouter = require("./routes/vehicle");
 // const Grid = require("gridfs-stream");
 // const upload = require('./routes/upload');
@@ -18,6 +19,7 @@ const DB = `mongodb+srv://iambinshad:${password}@cluster0.htuj346.mongodb.net/?r
 app.use(express.json());
 app.use(authRouter);
 app.use(vehicleRouter);
+app.use(brandRouter);
 // app.use("/file", upload);
 
 // let gfs;

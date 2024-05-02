@@ -9,16 +9,16 @@ Route<dynamic> generateRoute(RouteSettings routeSettings) {
   switch (routeSettings.name) {
     case HomePage.routeName:
       return MaterialPageRoute(
-          settings: routeSettings, builder: (_) =>  HomePage());
+          settings: routeSettings, builder: (_) => HomePage());
     case VehicleDetailsPage.routeName:
       return MaterialPageRoute(
-          settings: routeSettings, builder: (_) =>  VehicleDetailsPage());
-           case VehicleAddingScreen.routeName:
+          settings: routeSettings, builder: (_) => VehicleDetailsPage());
+    case BottomNavScreen.routeName:
       return MaterialPageRoute(
-          settings: routeSettings, builder: (_) =>  BottomNavScreen());
-                     case BottomNavScreen.routeName:
+          settings: routeSettings, builder: (_) => const BottomNavScreen());
+    case VehicleAddingScreen.routeName:
       return MaterialPageRoute(
-          settings: routeSettings, builder: (_) =>  VehicleAddingScreen());
+          settings: routeSettings, builder: (_) => VehicleAddingScreen());
     default:
       return MaterialPageRoute(
           settings: routeSettings,

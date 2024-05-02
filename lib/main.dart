@@ -1,4 +1,5 @@
 import 'package:fintrack/common/screens/splash.dart';
+import 'package:fintrack/feature/auth/screen/auth.dart';
 import 'package:fintrack/route.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
