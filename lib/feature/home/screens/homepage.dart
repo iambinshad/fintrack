@@ -59,6 +59,7 @@ class HomePage extends StatelessWidget {
                   final cntrl = Get.find<VehicleController>();
                   if (cntrl.vehicleList.isNotEmpty) {
                     return ListView.builder(
+                      // reverse:true ,
                       physics: const NeverScrollableScrollPhysics(),
                       shrinkWrap: true,
                       itemCount: cntrl.vehicleList.length,

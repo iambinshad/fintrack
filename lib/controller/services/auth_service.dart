@@ -89,7 +89,7 @@ class AuthService {
 
       // Make a POST request to check if the token is valid
       final tokenRes = await http.post(
-        Uri.parse("$url/isTokenValid"),
+        Uri.parse("${url}isTokenValid"),
         headers: {
           'Content-Type': 'application/json; charset=UTF-8',
           'x-auth-token': token.trim(),

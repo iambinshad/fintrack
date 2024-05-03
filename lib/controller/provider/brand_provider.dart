@@ -3,10 +3,22 @@ import 'package:fintrack/model/vehicle_brand.dart';
 import 'package:get/get.dart';
 
 class BrandController extends GetxController {
-  RxList brandList = [].obs;
+  final selectedBrand = Rx<BrandModel?>(null);
+  Brand brand = Brand();
 
-  Future<void> fetchBrandListCntrl() async {
-    Brand brand = Brand();
-    brandList = await brand.fetchBrandList();
+  Future fetchBrandListCntrl() async {
+    // log("Before");
+    final brands = await brand.fetchBrandList();
+    return brands;
+  }
+
+  Future addNewBrandCntrl(brandName, brandImage) async {
+    return brand.addNewBrand(brandName, brandImage);
+  }
+
+  void onBrandSelected(BrandModel? brand) {
+    selectedBrand.value = brand;
+    update();
+    // Update UI based on selected brand (optional)
   }
 }

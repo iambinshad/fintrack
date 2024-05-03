@@ -32,7 +32,7 @@ class VehicleService {
           onSuccess: () async {
             showSnackBar(context, "New Vehicle Added Succusfully!");
             await Get.find<VehicleController>().fetchAllVehicle();
-            
+
           });
     } catch (e) {
       log(e.toString());

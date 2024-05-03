@@ -1,41 +1,28 @@
-import 'package:get/get.dart';
+class BrandModel {
+  final String id;
+  final String brandName;
+  final String brandImage;
 
-class VehicleModel {
-    RxList<BrandListModel> data;
+  BrandModel({required this.id, required this.brandName, required this.brandImage});
 
-    VehicleModel({
-        required this.data,
-    });
-
-    factory VehicleModel.fromJson(Map<String, dynamic> json) => VehicleModel(
-        data: RxList<BrandListModel>.from(json["vehicles"].map((x) => BrandListModel.fromJson(x))),
+  factory BrandModel.fromJson(Map<String, dynamic> json) {
+    return BrandModel(
+      id: json['_id'],
+      brandName: json['brandName'],
+      brandImage: json['brandImage'],
     );
-
-    Map<String, dynamic> toJson() => {
-        "vehicles": List<dynamic>.from(data.map((x) => x.toJson())),
-    };
-}
-class BrandListModel {
-  int id;
-  String brandName;
-  String brandImage;
-
-  BrandListModel({
-    required this.id,
-    required this.brandName,
-    required this.brandImage,
-  });
-
-  factory BrandListModel.fromJson(Map<String, dynamic> json) {
-    return BrandListModel(
-        id: json["_id"],
-        brandName: json["brandName"],
-        brandImage: json["brandImage"]);
   }
 
-     Map<String, dynamic> toJson() => {
-        "brandName": brandName,
-        "brandImage": brandImage,
-       "_id":id
-    };
+  @override
+  bool operator ==(Object other) {
+    if (identical(this, other)) return true;
+
+    return other is BrandModel &&
+        other.id == id &&
+        other.brandName == brandName &&
+        other.brandImage == brandImage;
+  }
+
+  @override
+  int get hashCode => id.hashCode ^ brandName.hashCode ^ brandImage.hashCode;
 }

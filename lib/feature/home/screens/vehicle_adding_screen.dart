@@ -7,11 +7,13 @@ import 'package:fintrack/common/widgets/custom_button.dart';
 import 'package:fintrack/common/widgets/custome_textfield.dart';
 import 'package:fintrack/constants/global_varialbles.dart';
 import 'package:fintrack/constants/utils.dart';
+import 'package:fintrack/controller/provider/brand_provider.dart';
 import 'package:fintrack/controller/services/vehicle_adding.dart';
 import 'package:fintrack/core/constant.dart';
 import 'package:fintrack/model/vehicle.dart';
 import 'package:fintrack/model/vehicle_brand.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:image_picker/image_picker.dart';
 
 class VehicleAddingScreen extends StatefulWidget {
@@ -23,29 +25,52 @@ class VehicleAddingScreen extends StatefulWidget {
 }
 
 class _VehicleAddingScreenState extends State<VehicleAddingScreen> {
+  final brandProvider = Get.put(BrandController());
+  var brandList = [];
+
+  @override
+  void initState() {
+    WidgetsBinding.instance.addPostFrameCallback((timeStamp) async {
+      brandList = await brandProvider.fetchBrandListCntrl();
+      brandList.add(
+          BrandModel(id: "0", brandName: "Add New Brand   +", brandImage: ""));
+      log(brandList.toString());
+      brandProvider.update();
+    });
+    super.initState();
+  }
+
   TextEditingController vehicleNameCntrl = TextEditingController();
   TextEditingController vehicleBrandCntrl = TextEditingController();
-  List<BrandListModel> brandList = [
-    BrandListModel(id: 3, brandName: "daldj", brandImage: "aldsj"),
-  ];
+  TextEditingController addNewBrandContrl = TextEditingController();
 
-  BrandListModel selectedBrand =
-      BrandListModel(id: -1, brandName: "Select Brand", brandImage: "Nothing");
   TextEditingController vehicleDescCntrl = TextEditingController();
   TextEditingController vehiclepriceCntrl = TextEditingController();
 
   VehicleService vehicleService = VehicleService();
   File? _imgFile;
-  void takeSnapshot() async {
+  File? _brandImageFile;
+  void takeSnapshot(from) async {
     final ImagePicker picker = ImagePicker();
-    final XFile? img = await picker.pickMedia(
-      // source: ImageSource.camera, // alternatively, use ImageSource.gallery
-      maxWidth: 400,
-    );
-    if (img == null) return;
-    setState(() {
-      _imgFile = File(img.path); // convert it to a Dart:io file
-    });
+    if (from == "image") {
+      final XFile? img = await picker.pickMedia(
+        // source: ImageSource.camera, // alternatively, use ImageSource.gallery
+        maxWidth: 400,
+      );
+      if (img == null) return;
+      setState(() {
+        _imgFile = File(img.path); // convert it to a Dart:io file
+      });
+    } else {
+      final XFile? img = await picker.pickMedia(
+        // source: ImageSource.camera, // alternatively, use ImageSource.gallery
+        maxWidth: 400,
+      );
+      if (img == null) return;
+      setState(() {
+        _brandImageFile = File(img.path); // convert it to a Dart:io file
+      });
+    }
   }
 
   @override
@@ -61,7 +86,7 @@ class _VehicleAddingScreenState extends State<VehicleAddingScreen> {
               _imgFile == null
                   ? InkWell(
                       onTap: () {
-                        takeSnapshot();
+                        takeSnapshot("image");
                       },
                       child: DottedBorder(
                         dashPattern: const [5, 5, 5, 5],
@@ -85,26 +110,81 @@ class _VehicleAddingScreenState extends State<VehicleAddingScreen> {
                 hintText: "Vehicle Name",
               ),
               kHeight10,
-              CustomTextField(
-                suffix: DropdownButtonFormField<BrandListModel>(
-                  iconEnabledColor: Colors.red,
-                  icon: Padding(
-                    padding: EdgeInsets.only(right: 2),
-                    child: Icon(Icons.arrow_forward_ios_rounded,
-                        color: Colors.black26, size: 20),
+              Obx(
+                () => SizedBox(
+                  height: 60,
+                  child: CustomTextField(
+                    suffix: DropdownButtonHideUnderline(
+                      child: DropdownButtonFormField<BrandModel>(
+                        isExpanded: true,
+                        decoration:
+                            const InputDecoration.collapsed(hintText: ''),
+                        iconEnabledColor: Colors.red,
+                        icon: const Padding(
+                          padding: EdgeInsets.only(right: 2),
+                          child: Icon(Icons.arrow_forward_ios_rounded,
+                              color: Colors.black26, size: 20),
+                        ),
+                        isDense: true,
+                        value: brandProvider.selectedBrand.value,
+                        items: brandList
+                            .map((brand) => DropdownMenuItem<BrandModel>(
+                                  value: brand,
+                                  child: Text(brand.brandName),
+                                ))
+                            .toList(),
+                        onChanged: (brand) {
+                          if (brand!.id != "0") {
+                            brandProvider.onBrandSelected(brand);
+                            vehicleBrandCntrl.text = brand.brandName;
+                          } else {
+                            showModalBottomSheet<void>(
+                                // context and builder are
+                                // required properties in this widget
+                                context: context,
+                                builder: (BuildContext context) {
+                                  // we set up a container inside which
+                                  // we create center column and display text
+
+                                  // Returning SizedBox instead of a Container
+                                  return SizedBox(
+                                    height: 200,
+                                    child: Center(
+                                      child: Column(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.center,
+                                        children: <Widget>[
+                                          Padding(
+                                            padding: const EdgeInsets.all(8.0),
+                                            child: SizedBox(
+                                              height: 60,
+                                              child: CustomTextField(
+                                                
+                                                  controller: addNewBrandContrl,
+                                                  hintText: "Type New Brand Name"),
+                                            ),
+                                          ),
+                                          Padding(
+                                            padding: const EdgeInsets.all(8.0),
+                                            child: CustomButton(
+                                                childText: "Add New Brand",
+                                                onTap: () {
+                                                  brandProvider.addNewBrandCntrl(addNewBrandContrl.text, _brandImageFile!.path);
+                                                }),
+                                          )
+                                        ],
+                                      ),
+                                    ),
+                                  );
+                                });
+                          }
+                        },
+                      ),
+                    ),
+                    controller: vehicleBrandCntrl,
+                    hintText: "Brand",
                   ),
-                  isDense: true,
-                  value: selectedBrand,
-                  items: brandList
-                      .map((brand) => DropdownMenuItem<BrandListModel>(
-                            value: brand,
-                            child: Text(brand.brandName),
-                          ))
-                      .toList(),
-                  onChanged: (cvalue) {},
                 ),
-                controller: vehicleBrandCntrl,
-                hintText: "Brand",
               ),
               kHeight10,
               CustomTextField(
